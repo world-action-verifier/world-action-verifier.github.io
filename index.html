@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="World Action Verifier: Self-Improving World Models via Asymmetric Forward-Inverse Consistency">
+  <meta name="keywords" content="World Model, Forward-Inverse Consistency, Self-Improving, Robotic Manipulation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Action Verifier</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" type="image/png" href="/favicon.png">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/misc.css">
+
+  <style>
+    .wav-heading {
+      font-size: 2.1rem;
+    }
+
+    /* Experiment video blocks (Method → Results) */
+    .exp-video-section {
+      padding: 2.75rem 0 3rem;
+    }
+
+    .exp-video-section h2.title {
+      position: relative;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.25rem !important;
+    }
+
+    .exp-video-section h2.title::after {
+      content: '';
+      display: block;
+      width: 4.5rem;
+      height: 3px;
+      margin: 0.85rem auto 0;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #3273dc, #8badf7);
+    }
+
+    .exp-video-section .exp-video-lead {
+      max-width: 42rem;
+      margin: 0 auto 1.75rem;
+      font-size: 0.95rem;
+      color: #646464;
+      line-height: 1.5;
+    }
+
+    .exp-video-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.35rem;
+      align-items: stretch;
+    }
+
+    /* Single shadow panel: video + caption share one neutral surface */
+    .exp-video-card {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        0 12px 28px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .exp-video-card:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.06),
+        0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .exp-video-card .exp-video-frame {
+      position: relative;
+      background: #fff;
+      aspect-ratio: 16 / 10;
+    }
+
+    .exp-video-card video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .exp-video-card .exp-video-caption {
+      margin: 0;
+      padding: 0.7rem 1rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #5a5a5a;
+      text-align: center;
+      background: #fff;
+    }
+
+    @media (max-width: 1024px) {
+      .exp-video-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .exp-video-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-fullhd">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="title publication-title title-inline">
+            <span class="title-inline-main">World Action Verifier: Self-Improving World Models via Asymmetric Forward-Inverse Consistency</span>
+          </div>
+
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://sites.google.com/view/yuejiangliu">Yuejiang Liu</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Lingjing+Kong+Carnegie+Mellon">Lingjing Kong</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Fan+Feng+UC+San+Diego">Fan Feng</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Weifeng+Lu+Shanghai+Jiao+Tong">Weifeng Lu</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Jinzhou+Tang+UC+San+Diego">Jinzhou Tang</a><sup>3</sup>,
+            </span>
+            <br>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=XiangCheng+Zhang+Tsinghua">XiangCheng Zhang</a><sup>5</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Kun+Zhang+Carnegie+Mellon">Kun Zhang</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.cs.ubc.ca/~murphyk/">Kevin Patrick Murphy</a><sup>6</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://yilundu.github.io/">Yilun Du</a><sup>7</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>1</sup>Stanford University</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>2</sup>Carnegie Mellon University</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>3</sup>University of California, San Diego</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>4</sup>School of AI, Shanghai Jiao Tong University</span>
+            <br>
+            <span class="author-block"><sup>5</sup>Tsinghua University</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>6</sup>Google DeepMind</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>7</sup>Harvard University</span>
+          </div>
+
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+
+              <span class="link-block">
+                <a href="#"
+                  onclick="return false;"
+                  class="external-link button is-normal is-rounded is-dark"
+                  title="Placeholder: replace with your World Action Verifier arXiv URL">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="#"
+                   onclick="return false;"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Placeholder: replace with your World Action Verifier GitHub repository">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+              <span class="link-block">
+                <a href="#"
+                  onclick="return false;"
+                  class="external-link button is-normal is-rounded is-dark"
+                  title="Placeholder: replace with your X or blog post URL">
+                  <span class="icon">
+                    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="height: 1em; width: 1em;">
+                      <title>Blog</title>
+                      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                    </svg>
+                  </span>
+                  <span>Blog</span>
+                </a>
+              </span>
+            </div>
+          </div>
+         
+
+
+
+          <div class="container is-max-desktop">
+            <img src="./media/fig/teaser.png" alt="World Action Verifier teaser" style="width:100%; height:auto;" />
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              World models promise scalable policy evaluation, optimization, and planning, 
+              yet achieving the required level of robustness remains challenging. Unlike policy
+              learning which primarily focuses on optimal actions, a general-purpose world model
+              must be reliable over a much broader range of suboptimal actions, which are often 
+              insufficiently covered by action-labeled interaction data. To address this challenge,
+              we present World Action Verifier (WAV), a framework that enables world models to
+              identify their own prediction errors and self-improve. The key idea is to decompose 
+              action-conditioned state prediction into two factors—state plausibility and 
+              action reachability—and verify each separately. We show that these decomposed 
+              verification problems can be substantially easier than directly predicting future 
+              states due to two underlying asymmetries: the broader availability of action-free 
+              data and the lower dimensionality of action-relevant features. Leveraging these 
+              asymmetries, we augment a world model with (i) a diverse subgoal generator obtained
+              from video corpora and (ii) a sparse inverse model that infers actions from a selected 
+              subset of state features. By enforcing cycle consistency among generated subgoals, 
+              inferred actions, and forward rollouts, WAV provides an effective verification mechanism 
+              in under-explored regimes, where existing methods typically fail. Across nine tasks 
+              spanning MiniGrid, RoboMimic, and ManiSkill, our method improves downstream policy
+              performance by 18\% while reducing the action-labeled data budget by more than 50\%.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Analysis: Two Key Asymmetries</h2>
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
+            <img src="./media/fig/asymmetric.png" alt="Asymmetric verification illustration"
+              style="width: 80%; max-width: 100%; height: auto;" />
+          </figure>
+          <div class="box has-background-white-bis">
+            <div style="text-align: justify; line-height: 1.6;">
+              <p>
+                We formalize the "Verification Subset" $\mathcal{S}$ as a block of latent variables that is both insulated (independent of scene clutter) and action-influenced. The sparse inverse model $h_\psi$ operates solely on this subset:
+              </p>
+              <p style="text-align: center; margin: 1rem 0;">
+                $$\hat{\mathbf{a}}^{t} = h_\psi(\hat{\mathbf{z}}_{\mathcal{S}}^{t}, \hat{\mathbf{z}}_{\mathcal{S}}^{t+1})$$
+              </p>
+              <p>
+                Our theoretical analysis rests on the Generation-Verification Gap. Even when the full state-action pair $(\mathbf{z}^{t}, \mathbf{a}^{t})$ is out-of-support (OOS), the sub-block transition often satisfies two conditions:
+              </p>
+              <p>
+                <strong>In-Distribution Verifier:</strong> The subset pair remains on the training support:
+              </p>
+              <p style="text-align: center; margin: 1rem 0;">
+                $$(\mathbf{z}_{\mathcal{S}}^{t}, \mathbf{a}^{t}) \in \operatorname{supp}(P_{\text{seed}})$$
+              </p>
+              <p>
+                <strong>Identifiable Actions:</strong> The action leaves a unique, recoverable imprint on $\mathbf{z}_{\mathcal{S}}$.
+              </p>
+              <p>
+                <strong>Theorem (Informal):</strong> Under these conditions, the inverse verifier $h_\psi$ can correctly recover missing actions even on compositional OOS transitions, providing a robust signal for self-improvement.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 publication-title wav-heading has-text-centered">Method: Asymmetric Forward-Inverse Consistency</h2>
+          <img src="./media/fig/method.png" alt="World Action Verifier method overview"
+            style="width:100%; height:auto;" />
+          <div class="content has-text-justified" style="margin-top:1.5rem;">
+            <p>
+              Our objective is to learn a robust action-conditioned world model that satisfies two 
+              critical desiderata: high fidelity in state prediction and reliable controllability in 
+              under-explored regimes. Prior world models often collapse on the long tail of suboptimal
+              actions due to the scarcity of labeled interaction data and the difficulty of verifying
+              high-dimensional predictions. WAV remedies that by exploiting the asymmetry between 
+              generation and verification through a video-prior subgoal generator, a sparse inverse
+              model, and a forward-inverse cycle. Leveraging the abundance of unlabeled videos for
+              state plausibility and a sparsity constraint for action identifiability induces a 
+              rigorous self-verification mechanism. This cycle-consistency metric allows the agent
+              to autonomously detect and correct errors in novel scenarios, enabling data-efficient 
+              self-improvement without dense supervision, as shown in the figure above.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero exp-video-section">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Diagnostic Experiments in MiniGrid</h2>
+      <p class="exp-video-lead has-text-centered">Placeholder videos — replace sources and captions when ready.</p>
+      <div class="exp-video-grid">
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 1</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 2</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 3</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 4</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero exp-video-section">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Curation Experiments in RoboMimic &amp; ManiSkill</h2>
+      <p class="exp-video-lead has-text-centered">Placeholder videos — replace sources and captions when ready.</p>
+      <div class="exp-video-grid">
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 1</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 2</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 3</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 4</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero exp-video-section">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Policy Experiments in RoboMimic &amp; ManiSkill</h2>
+      <p class="exp-video-lead has-text-centered">Placeholder videos — replace sources and captions when ready.</p>
+      <div class="exp-video-grid">
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 1</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 2</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 3</p>
+        </div>
+        <div class="exp-video-card">
+          <div class="exp-video-frame">
+            <video controls playsinline muted loop preload="metadata">
+              <source src="./media/video/placeholder.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="exp-video-caption">Video 4</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 wav-heading has-text-centered">Results</h2>
+
+      <!-- Experiment 1 -->
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure style="margin-bottom: 1.5rem;">
+          <img src="./media/fig/fig3.png" alt="Experiment figure 3" />
+        </figure>
+      </div>
+
+      <!-- Experiment 2 -->
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure style="margin-bottom: 1.5rem;">
+          <img src="./media/fig/fig4.png" alt="Experiment figure 4" />
+        </figure>
+      </div>
+
+      <!-- Experiment 3 -->
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure style="margin-bottom: 1.5rem;">
+          <img src="./media/fig/fig5.png" alt="Experiment figure 5" />
+        </figure>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{liu2026selfimproving,
+      title={World Action Verifier: Self-Improving World Models via Asymmetric Forward-Inverse Consistency},
+      author={Liu, Yuejiang and Kong, Lingjing and Feng, Fan and Lu, Weifeng and Tang, Jinzhou and Zhang, 
+              XiangCheng and Zhang, Kun and Murphy, Kevin Patrick and Du, Yilun and Finn, Chelsea},
+      journal={arXiv preprint arXiv:2602.XXXXX},
+      year={2026}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content has-text-centered">
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+
+</html>
