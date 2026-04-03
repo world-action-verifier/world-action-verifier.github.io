@@ -397,7 +397,8 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <div class="title publication-title title-inline">
-            <span class="title-inline-main">World Action Verifier: Self-Improving World Models via Forward-Inverse Asymmetry</span>
+            <span class="title-inline-main"><strong>World Action Verifier</strong>
+            <br><span style="font-weight: 400; font-size: 0.75em;">Self-Improving World Models via Forward-Inverse Asymmetry</span></span>
           </div>
 
 
@@ -586,21 +587,21 @@
               </p>
 
               <p style="margin-top: 1rem;">
-                <strong>Asymmetry 1: Easier State Verification via Broad Data Coverage.</strong> 
+                <strong>Distribution Asymmetry: State Verification via Broader Coverage of Action-Free Data</strong> 
                 Directly modeling forward dynamics requires learning action-conditioned transitions, which are sparse and expensive. 
                 In contrast, verifying state plausibility only requires learning the marginal transition model and this model can be trained from abundant 
                 action-free video data, providing substantially broader coverage of the state manifold. 
               </p>
 
               <p style="margin-top: 1rem;">
-                <strong>Asymmetry 2: Easier Action Verification via Low-Dimensional Structure.</strong> 
+                <strong>Dimensionality Asymmetry: Action Verification via Lower-Dimensionality of Action-Relevant Features</strong> 
                 Verifying reachability in the full state space is challenging. However, in many tasks, actions depend only on a small subset of state features. 
                 We exploit this structure by learning a sparse inverse dynamics model, which reduces the problem from high-dimensional state matching to a simpler, 
                 low-dimensional action inference problem.
               </p>
 
               <p style="margin-top: 1rem;">
-                <strong>Method: Verification-Guided Self-Improving Cycle.</strong>
+                <!-- <strong>Method: Verification-Guided Self-Improving Cycle.</strong> -->
                 Given the two verification criteria above, we connect them into a self-improvement loop for exploration:
               </p>
               
@@ -814,7 +815,7 @@
     <div class="container is-max-desktop">
       <h2 class="title is-3 publication-title wav-heading has-text-centered">Videos</h2>
 
-      <div class="box exp-video-panel" style="margin-bottom: 2rem;">
+      <!-- <div class="box exp-video-panel" style="margin-bottom: 2rem;">
         <h3 class="title is-4 publication-title wav-heading has-text-centered">Exploration Tasks in MiniGrid</h3>
         <p class="exp-video-lead">
           We evaluate WAV on three long-horizon MiniGrid tasks, 
@@ -857,7 +858,7 @@
             <p class="exp-video-caption">Random play in EmptyEnv</p>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="box exp-video-panel" style="margin-bottom: 2rem;">
         <h3 class="title is-4 publication-title wav-heading has-text-centered">Prediction Comparison in MiniGrid</h3>
@@ -885,15 +886,15 @@
           <div class="prediction-gallery-row">
             <div class="prediction-method-card">
               <div class="prediction-result-frame">
-                <img data-method-image="Progress" src="./media/fig/placeholder2.png" alt="Progress prediction">
-              </div>
-              <p class="prediction-method-caption">Progress</p>
-            </div>
-            <div class="prediction-method-card">
-              <div class="prediction-result-frame">
                 <img data-method-image="Uncertainty" src="./media/fig/placeholder2.png" alt="Uncertainty prediction">
               </div>
               <p class="prediction-method-caption">Uncertainty</p>
+            </div>
+            <div class="prediction-method-card">
+              <div class="prediction-result-frame">
+                <img data-method-image="Progress" src="./media/fig/placeholder2.png" alt="Progress prediction">
+              </div>
+              <p class="prediction-method-caption">Progress</p>
             </div>
             <div class="prediction-method-card">
               <div class="prediction-result-frame">
@@ -931,18 +932,18 @@
             <div class="exp-video-card">
               <div class="exp-video-frame">
                 <video autoplay muted playsinline loop preload="metadata" controls>
-                  <source src="./media/video/can/progress.mp4" type="video/mp4" />
-                </video>
-              </div>
-              <p class="exp-video-caption">Progress</p>
-            </div>
-            <div class="exp-video-card">
-              <div class="exp-video-frame">
-                <video autoplay muted playsinline loop preload="metadata" controls>
                   <source src="./media/video/can/uncertainty.mp4" type="video/mp4" />
                 </video>
               </div>
               <p class="exp-video-caption">Uncertainty</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/can/progress.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Progress</p>
             </div>
             <div class="exp-video-card">
               <div class="exp-video-frame">
@@ -969,18 +970,18 @@
             <div class="exp-video-card">
               <div class="exp-video-frame">
                 <video autoplay muted playsinline loop preload="metadata" controls>
-                  <source src="./media/video/lift/progress.mp4" type="video/mp4" />
-                </video>
-              </div>
-              <p class="exp-video-caption">Progress</p>
-            </div>
-            <div class="exp-video-card">
-              <div class="exp-video-frame">
-                <video autoplay muted playsinline loop preload="metadata" controls>
                   <source src="./media/video/lift/uncertainty.mp4" type="video/mp4" />
                 </video>
               </div>
               <p class="exp-video-caption">Uncertainty</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/lift/progress.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Progress</p>
             </div>
             <div class="exp-video-card">
               <div class="exp-video-frame">
@@ -1007,18 +1008,18 @@
             <div class="exp-video-card">
               <div class="exp-video-frame">
                 <video autoplay muted playsinline loop preload="metadata" controls>
-                  <source src="./media/video/square/progress.mp4" type="video/mp4" />
-                </video>
-              </div>
-              <p class="exp-video-caption">Progress</p>
-            </div>
-            <div class="exp-video-card">
-              <div class="exp-video-frame">
-                <video autoplay muted playsinline loop preload="metadata" controls>
                   <source src="./media/video/square/uncertainty.mp4" type="video/mp4" />
                 </video>
               </div>
               <p class="exp-video-caption">Uncertainty</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/square/progress.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Progress</p>
             </div>
             <div class="exp-video-card">
               <div class="exp-video-frame">
@@ -1046,13 +1047,13 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{liu2026worldactionverifierselfimproving,
+    <pre><code>@article{liu2026wav, 
       title={World Action Verifier: Self-Improving World Models via Forward-Inverse Asymmetry}, 
-      author={Yuejiang Liu and Fan Feng and Lingjing Kong and Weifeng Lu and Jinzhou Tang and Kun Zhang and Kevin Murphy and Chelsea Finn and Yilun Du},
-      year={2026},
-      eprint={2604.01985},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
+      author={Yuejiang Liu and Fan Feng and Lingjing Kong and Weifeng Lu and Jinzhou Tang and Kun Zhang and Kevin Murphy and Chelsea Finn and Yilun Du}, 
+      year={2026}, 
+      eprint={2604.01985}, 
+      archivePrefix={arXiv}, 
+      primaryClass={cs.LG}, 
       url={https://arxiv.org/abs/2604.01985}, 
 }</code></pre>
   </div>
