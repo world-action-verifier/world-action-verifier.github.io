@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="World Action Verifier: Self-Improving World Models via Asymmetric Forward-Inverse Consistency">
+  <meta name="description" content="World Action Verifier: Self-Improving World Models via Forward-Inverse Asymmetry">
   <meta name="keywords" content="World Model, Forward-Inverse Consistency, Self-Improving, Robotic Manipulation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>World Action Verifier</title>
@@ -32,13 +32,36 @@
   <link rel="stylesheet" href="./static/css/misc.css">
 
   <style>
+    body {
+      background-color: #fff;
+      color: #363636;
+    }
+
     .wav-heading {
       font-size: 2.1rem;
     }
 
-    /* Experiment video blocks (Method → Results) */
+    .hero.exp-video-section {
+      background: #fff;
+    }
+
+    /* Experiment video blocks (below Results) */
     .exp-video-section {
-      padding: 2.75rem 0 3rem;
+      padding: 2.25rem 0 2.5rem;
+    }
+
+    .exp-video-section--robot {
+      padding-top: 0.1rem;
+    }
+
+    /* Tighter gap between MiniGrid row and Qualitative heading */
+    .exp-video-section--minigrid {
+      padding-bottom: 1rem;
+    }
+
+    .exp-video-section--minigrid + .exp-video-section {
+      padding-top: 1.35rem;
+      border-top: none;
     }
 
     .exp-video-section h2.title {
@@ -57,6 +80,26 @@
       background: linear-gradient(90deg, #3273dc, #8badf7);
     }
 
+    .exp-video-section--minigrid h2.title::after,
+    .exp-video-section--robot h2.title::after {
+      display: none;
+    }
+
+    .exp-video-row {
+      margin-bottom: 2.5rem;
+    }
+
+    .exp-video-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .exp-video-task {
+      margin-bottom: 1rem !important;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #4a4a4a;
+    }
+
     .exp-video-section .exp-video-lead {
       max-width: 42rem;
       margin: 0 auto 1.75rem;
@@ -65,9 +108,38 @@
       line-height: 1.5;
     }
 
+    /* Text aligns with video grid edges inside panel */
+    .exp-video-panel .exp-video-lead {
+      max-width: none;
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      text-align: left;
+    }
+
+    .exp-video-panel {
+      margin-bottom: 0;
+      border: 1px solid #e8e8e8;
+      box-shadow: 0 2px 8px rgba(10, 10, 10, 0.06);
+    }
+
+    .exp-video-panel h2.title {
+      text-align: center;
+    }
+
+    .exp-video-panel .exp-video-task {
+      text-align: center;
+      padding-left: 0.15rem;
+    }
+
+    .exp-video-panel .exp-video-grid,
+    .exp-video-panel .exp-video-grid--4 {
+      width: 100%;
+    }
+
     .exp-video-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 1.35rem;
       align-items: stretch;
     }
@@ -77,19 +149,21 @@
       display: flex;
       flex-direction: column;
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       overflow: hidden;
+      border: 1px solid rgba(15, 23, 42, 0.07);
       box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.04),
-        0 12px 28px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+        0 1px 2px rgba(15, 23, 42, 0.04),
+        0 10px 28px rgba(15, 23, 42, 0.08);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
     }
 
     .exp-video-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
+      border-color: rgba(50, 115, 220, 0.18);
       box-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.06),
-        0 20px 40px rgba(0, 0, 0, 0.12);
+        0 4px 12px rgba(50, 115, 220, 0.08),
+        0 16px 36px rgba(15, 23, 42, 0.1);
     }
 
     .exp-video-card .exp-video-frame {
@@ -118,6 +192,12 @@
       background: #fff;
     }
 
+    @media (max-width: 1200px) {
+      .exp-video-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
     @media (max-width: 1024px) {
       .exp-video-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -128,6 +208,175 @@
       .exp-video-grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    .exp-video-grid--4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1200px) {
+      .exp-video-grid--4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .exp-video-grid--4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .exp-video-grid--4 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* MiniGrid: align width with sections below; slightly tighter grid */
+    .exp-video-section--minigrid .exp-video-grid--4 {
+      gap: 1rem;
+    }
+
+    .exp-video-section--minigrid .exp-video-frame {
+      aspect-ratio: 16 / 10;
+      background: radial-gradient(ellipse at center, #1a1d24 0%, #0f1114 100%);
+    }
+
+    .exp-video-section--minigrid .exp-video-card video {
+      object-fit: contain;
+    }
+
+    /* Qualitative rows: same 4-up layout & frame treatment as MiniGrid */
+    .exp-video-section--robot .exp-video-grid--4 {
+      gap: 1rem;
+    }
+
+    .exp-video-section--robot .exp-video-grid--4 .exp-video-frame {
+      aspect-ratio: 16 / 10;
+      background: radial-gradient(ellipse at center, #1a1d24 0%, #0f1114 100%);
+    }
+
+    .exp-video-section--robot .exp-video-grid--4 .exp-video-card video {
+      object-fit: contain;
+    }
+
+    /* Interactive MiniGrid prediction gallery */
+    .prediction-gallery {
+      margin-top: 2rem;
+    }
+
+    .prediction-gallery-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .prediction-thumb-button {
+      appearance: none;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      background: #fff;
+      padding: 0.35rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      opacity: 0.5;
+    }
+
+    .prediction-thumb-button.is-active {
+      opacity: 1;
+      border-color: rgba(50, 115, 220, 0.7);
+      box-shadow: 0 0 0 2px rgba(50, 115, 220, 0.18);
+    }
+
+    .prediction-thumb-button img,
+    .prediction-result-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .prediction-method-card {
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    }
+
+    .prediction-result-frame {
+      aspect-ratio: 16 / 10;
+      /* 去掉深色渐变背景和内边距，让图片无黑色边框 */
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem;
+    }
+
+    .prediction-method-caption {
+      margin: 0;
+      padding: 0.65rem 0.75rem 0.75rem;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4a4a4a;
+    }
+
+    .prediction-action-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    .prediction-action-button {
+      appearance: none;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      background: #fff;
+      color: #4a4a4a;
+      font-weight: 600;
+      padding: 0.58rem 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .prediction-action-button:hover {
+      border-color: #3273dc;
+      color: #3273dc;
+    }
+
+    .prediction-action-button.is-active {
+      border-color: #3273dc;
+      color: #fff;
+      background: #3273dc;
+      box-shadow: 0 6px 14px rgba(50, 115, 220, 0.22);
+    }
+
+    @media (max-width: 900px) {
+      .prediction-gallery-row,
+      .prediction-action-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .prediction-gallery-row,
+      .prediction-action-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #BibTeX.section {
+      background: #fff;
+      border-top: 1px solid #eee;
+    }
+
+    .footer {
+      background: #fff;
+      border-top: 1px solid #eee;
     }
   </style>
 
@@ -148,53 +397,49 @@
       <div class="columns is-centered">
         <div class="column has-text-centered">
           <div class="title publication-title title-inline">
-            <span class="title-inline-main">World Action Verifier: Self-Improving World Models via Asymmetric Forward-Inverse Consistency</span>
+            <span class="title-inline-main">World Action Verifier: Self-Improving World Models via Forward-Inverse Asymmetry</span>
           </div>
 
 
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://sites.google.com/view/yuejiangliu">Yuejiang Liu</a><sup>1</sup>,
+              <a href="https://sites.google.com/view/yuejiangliu">Yuejiang Liu</a><sup>&dagger;,*</sup>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Lingjing+Kong+Carnegie+Mellon">Lingjing Kong</a><sup>2</sup>,
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Fan+Feng+UC+San+Diego">Fan Feng</a><sup>&Dagger;,*</sup>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Fan+Feng+UC+San+Diego">Fan Feng</a><sup>3</sup>,
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Lingjing+Kong+Carnegie+Mellon">Lingjing Kong</a><sup>&sect;,*</sup>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Weifeng+Lu+Shanghai+Jiao+Tong">Weifeng Lu</a><sup>4</sup>,
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Weifeng+Lu+Shanghai+Jiao+Tong">Weifeng Lu</a>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Jinzhou+Tang+UC+San+Diego">Jinzhou Tang</a><sup>3</sup>,
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Jinzhou+Tang+UC+San+Diego">Jinzhou Tang</a><sup>&Dagger;</sup>,
             </span>
             <br>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=XiangCheng+Zhang+Tsinghua">XiangCheng Zhang</a><sup>5</sup>,
+              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Kun+Zhang+Carnegie+Mellon">Kun Zhang</a><sup>&sect;</sup>,
             </span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&view_op=search_authors&mauthors=Kun+Zhang+Carnegie+Mellon">Kun Zhang</a><sup>2</sup>,
+              <a href="https://www.cs.ubc.ca/~murphyk/">Kevin Patrick Murphy</a><sup>&para;</sup>,
             </span>
             <span class="author-block">
-              <a href="https://www.cs.ubc.ca/~murphyk/">Kevin Patrick Murphy</a><sup>6</sup>,
+              <a href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a><sup>&dagger;</sup>,
             </span>
             <span class="author-block">
-              <a href="https://yilundu.github.io/">Yilun Du</a><sup>7</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a><sup>1</sup>
+              <a href="https://yilundu.github.io/">Yilun Du</a><sup>||</sup>
             </span>
           </div>
 
           <div class="is-size-6 publication-authors">
-            <span class="author-block"><sup>1</sup>Stanford University</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>2</sup>Carnegie Mellon University</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>3</sup>University of California, San Diego</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>4</sup>School of AI, Shanghai Jiao Tong University</span>
+            <span class="author-block"><sup>&dagger;</sup>Stanford University</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>&Dagger;</sup>University of California, San Diego</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>&sect;</sup>Carnegie Mellon University</span>
             <br>
-            <span class="author-block"><sup>5</sup>Tsinghua University</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>6</sup>Google DeepMind</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>7</sup>Harvard University</span>
+            <span class="author-block"><sup>&para;</sup>Google DeepMind</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>||</sup>Harvard University</span>&nbsp;&nbsp;
+            <span class="author-block"><sup>*</sup>Equal contribution</span>
           </div>
 
 
@@ -202,10 +447,9 @@
             <div class="publication-links">
 
               <span class="link-block">
-                <a href="#"
-                  onclick="return false;"
+                <a href="https://arxiv.org/abs/2604.01985"
                   class="external-link button is-normal is-rounded is-dark"
-                  title="Placeholder: replace with your World Action Verifier arXiv URL">
+                  title="arXiv:2604.01985">
                   <span class="icon">
                     <i class="ai ai-arxiv"></i>
                   </span>
@@ -217,15 +461,26 @@
                 <a href="#"
                    onclick="return false;"
                    class="external-link button is-normal is-rounded is-dark"
-                   title="Placeholder: replace with your World Action Verifier GitHub repository">
+                   title="Code release coming soon (not open-source yet)">
                   <span class="icon">
                       <i class="fab fa-github"></i>
                   </span>
-                  <span>Code</span>
+                  <span>Code (MiniGrid)</span>
                   </a>
               </span>
 
               <span class="link-block">
+                <a href="#"
+                   onclick="return false;"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Code release coming soon (not open-source yet)">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Robot)</span>
+                  </a>
+              </span>
+              <!-- <span class="link-block">
                 <a href="#"
                   onclick="return false;"
                   class="external-link button is-normal is-rounded is-dark"
@@ -236,7 +491,7 @@
                       <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
                     </svg>
                   </span>
-                  <span>Blog</span>
+                  <span>Blog</span> -->
                 </a>
               </span>
             </div>
@@ -268,25 +523,21 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              World models promise scalable policy evaluation, optimization, and planning, 
-              yet achieving the required level of robustness remains challenging. Unlike policy
-              learning which primarily focuses on optimal actions, a general-purpose world model
-              must be reliable over a much broader range of suboptimal actions, which are often 
-              insufficiently covered by action-labeled interaction data. To address this challenge,
-              we present World Action Verifier (WAV), a framework that enables world models to
-              identify their own prediction errors and self-improve. The key idea is to decompose 
-              action-conditioned state prediction into two factors—state plausibility and 
-              action reachability—and verify each separately. We show that these decomposed 
-              verification problems can be substantially easier than directly predicting future 
-              states due to two underlying asymmetries: the broader availability of action-free 
-              data and the lower dimensionality of action-relevant features. Leveraging these 
-              asymmetries, we augment a world model with (i) a diverse subgoal generator obtained
-              from video corpora and (ii) a sparse inverse model that infers actions from a selected 
-              subset of state features. By enforcing cycle consistency among generated subgoals, 
-              inferred actions, and forward rollouts, WAV provides an effective verification mechanism 
-              in under-explored regimes, where existing methods typically fail. Across nine tasks 
-              spanning MiniGrid, RoboMimic, and ManiSkill, our method improves downstream policy
-              performance by 18\% while reducing the action-labeled data budget by more than 50\%.
+              General-purpose world models promise scalable policy evaluation, optimization, and planning,
+              yet achieving the required level of robustness remains challenging. Unlike policy learning which primarily
+              focuses on optimal actions, a world model needs to be reliable over a much broader range of suboptimal
+              actions, which are often insufficiently covered by action-labeled interaction data. To address this challenge,
+              we propose World Action Verifier (WAV), a framework that enables world models to identify their own
+              prediction errors and self-improve. The key idea is to decompose action-conditioned state prediction into
+              two factors—state plausibility and action reachability—and verify each separately. We show that these
+              verification problems can be substantially easier than predicting future states due to two underlying
+              asymmetries: the broader availability of action-free data and the lower dimensionality of action-relevant
+              features. Leveraging these asymmetries, we augment a world model with (i) a diverse subgoal generator
+              obtained from video corpora and (ii) a sparse inverse model that infers actions from a subset of state
+              features. By enforcing cycle consistency among generated subgoals, inferred actions, and forward rollouts,
+              WAV provides an effective verification mechanism in under-explored regimes, where existing methods
+              typically fail. Across nine tasks spanning MiniGrid, RoboMimic, and ManiSkill, our method achieves 2×
+              higher sample efficiency while improving downstream policy performance by 18%.              
             </p>
           </div>
         </div>
@@ -298,36 +549,492 @@
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop">
-      <h2 class="title is-3 publication-title wav-heading has-text-centered">Analysis: Two Key Asymmetries</h2>
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Method: Self-Improving World Model with World Action Verifier</h2>
       <div class="columns is-centered">
         <div class="column is-full-width">
-          <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
-            <img src="./media/fig/asymmetric.png" alt="Asymmetric verification illustration"
-              style="width: 80%; max-width: 100%; height: auto;" />
-          </figure>
+          <div class="columns is-vcentered is-variable is-6" style="margin-bottom: 1.75rem;">
+            <div class="column is-half" style="display: flex; justify-content: center;">
+              <figure class="image">
+                <img src="./media/fig/asymmetric.png" alt="Asymmetric verification illustration"
+                  style="width: 100%; max-width: 100%; height: auto;" />
+              </figure>
+            </div>
+            <div class="column is-half" style="display: flex; justify-content: center;">
+              <figure class="image">
+                <img src="./media/fig/algo.png" alt="Algorithm illustration"
+                  style="width: 100%; max-width: 100%; height: auto;" />
+              </figure>
+            </div>
+          </div>
           <div class="box has-background-white-bis">
             <div style="text-align: justify; line-height: 1.6;">
+
               <p>
-                We formalize the "Verification Subset" $\mathcal{S}$ as a block of latent variables that is both insulated (independent of scene clutter) and action-influenced. The sparse inverse model $h_\psi$ operates solely on this subset:
+              As illustrated above, the subgoal generator $p_\phi$ and the inverse model $h_\psi$ form two complementary components for verification:
+              the former evaluates whether a candidate future is plausible, while the latter checks whether it is reachable under an inferred action. 
+              Instead of directly estimating model error, we reformulate verification through two complementary and asymmetric factors derived from Bayes’ rule:
               </p>
+
               <p style="text-align: center; margin: 1rem 0;">
-                $$\hat{\mathbf{a}}^{t} = h_\psi(\hat{\mathbf{z}}_{\mathcal{S}}^{t}, \hat{\mathbf{z}}_{\mathcal{S}}^{t+1})$$
+                $$
+                p(s_{t+1}\mid s_t,a_t)
+                \propto
+                \underbrace{p(s_{t+1}\mid s_t)}_{\text{state}}
+                \cdot
+                \underbrace{p(a_t\mid s_t,s_{t+1})}_{\text{action}}
+                $$
               </p>
-              <p>
-                Our theoretical analysis rests on the Generation-Verification Gap. Even when the full state-action pair $(\mathbf{z}^{t}, \mathbf{a}^{t})$ is out-of-support (OOS), the sub-block transition often satisfies two conditions:
+
+              <p style="margin-top: 1rem;">
+                <strong>Asymmetry 1: Easier State Verification via Broad Data Coverage.</strong> 
+                Directly modeling forward dynamics requires learning action-conditioned transitions, which are sparse and expensive. 
+                In contrast, verifying state plausibility only requires learning the marginal transition model and this model can be trained from abundant 
+                action-free video data, providing substantially broader coverage of the state manifold. 
               </p>
-              <p>
-                <strong>In-Distribution Verifier:</strong> The subset pair remains on the training support:
+
+              <p style="margin-top: 1rem;">
+                <strong>Asymmetry 2: Easier Action Verification via Low-Dimensional Structure.</strong> 
+                Verifying reachability in the full state space is challenging. However, in many tasks, actions depend only on a small subset of state features. 
+                We exploit this structure by learning a sparse inverse dynamics model, which reduces the problem from high-dimensional state matching to a simpler, 
+                low-dimensional action inference problem.
               </p>
+
+              <p style="margin-top: 1rem;">
+                <strong>Method: Verification-Guided Self-Improving Cycle.</strong>
+                Given the two verification criteria above, we connect them into a self-improvement loop for exploration:
+              </p>
+              
               <p style="text-align: center; margin: 1rem 0;">
-                $$(\mathbf{z}_{\mathcal{S}}^{t}, \mathbf{a}^{t}) \in \operatorname{supp}(P_{\text{seed}})$$
+                $$
+                s_t \xrightarrow{p_\phi} \tilde{s}_{t+1}
+                \xrightarrow{h_\psi} \hat{a}_t
+                \xrightarrow{f_\theta} \hat{s}_{t+1}
+                $$
               </p>
-              <p>
-                <strong>Identifiable Actions:</strong> The action leaves a unique, recoverable imprint on $\mathbf{z}_{\mathcal{S}}$.
+
+              <p style="margin-top: 0.75rem;">
+                This closed-loop process enables self-improving exploration: the agent actively seeks out failures of its own predictions and uses them to refine its world model.
               </p>
-              <p>
-                <strong>Theorem (Informal):</strong> Under these conditions, the inverse verifier $h_\psi$ can correctly recover missing actions even on compositional OOS transitions, providing a robust signal for self-improvement.
-              </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3 publication-title wav-heading has-text-centered">Method: Verification-Guided Self-Improving Cycle</h2>
+
+          <img src="./media/fig/method.png" alt="World Action Verifier method overview"
+            style="width:100%; height:auto;" />
+
+          <div class="box has-background-white-bis">
+            <div class="content has-text-justified" style="margin-top:1.5rem;">
+
+            <p>
+              Given the two verification criteria above, we next connect them into a self-improvement loop for exploration. Instead of relying on potentially unreliable forward rollouts, WAV adopts a <strong>reverse verification cycle</strong> that anchors exploration on the state manifold.
+              Starting from the current state $s_t$, we sequentially apply:
+            </p>
+
+            <p style="text-align: center; margin: 1rem 0;">
+              $$
+              s_t \xrightarrow{p_\phi} \tilde{s}_{t+1}
+              \xrightarrow{h_\psi} \hat{a}_t
+              \xrightarrow{f_\theta} \hat{s}_{t+1}
+              $$
+            </p>
+
+            <p>
+              This ordering first proposes a <em>plausible future state</em>, then infers the action required to reach it, and finally checks whether the world model can realize this transition.
+              The discrepancy between the proposed and predicted states serves as a verification signal:
+            </p>
+
+            <p style="text-align: center; margin: 1rem 0;">
+              $$
+              \hat{\epsilon}(s_t, \hat{a}_t) = \ell\big(\tilde{s}_{t+1}, \hat{s}_{t+1}\big)
+              $$
+            </p>
+
+            <p>
+              Intuitively, large discrepancies indicate regions where the model fails to both stay on the state manifold and respect action consistency.
+              We use this signal to prioritize informative interactions during exploration.
+            </p>
+
+            <p style="margin-top: 1rem;">
+              Concretely, we sample multiple candidate subgoals, infer corresponding actions, and select the one that maximizes this disagreement.
+              The agent then executes the selected action in the environment, collects the resulting transition, and updates both the world model and the inverse model.
+            </p>
+
+            <p style="margin-top: 0.75rem;">
+              This closed-loop process enables <strong>self-improving exploration</strong>: the agent actively seeks out failures of its own predictions and uses them to refine its world model.
+            </p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 wav-heading has-text-centered">Experiments</h2>
+
+      <!-- Experiment 1: Figure 3 -->
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
+          <img src="./media/fig/fig3.png" alt="MiniGrid robustness experiments"
+            style="width: 100%; max-width: 100%; height: auto;" />
+        </figure>
+        <div class="box has-background-white-bis" style="max-width: 980px; margin: 0 auto;">
+          <div class="content has-text-justified" style="margin-top: 1rem;">
+            <p>
+              <strong>Robustness of Sparse Inverse Dynamics Models</strong><br>
+              We test forward world models (WM) and sparse inverse dynamics models (IDM) under controlled shifts:
+            </p>
+            <ul style="text-align: left; margin-left: 1.5rem;">
+              <li><strong>Sample Efficiency:</strong> IDMs consistently outperform WMs, especially in low-data regimes.</li>
+              <li><strong>Dimensionality:</strong> Increasing the number of objects degrades WM performance, while IDMs remain stable.</li>
+              <li><strong>Stochasticity:</strong> Observation noise (e.g., noisy floor tiles) impacts WMs but has minimal effect on IDMs.</li>
+            </ul>
+            <p>
+              These results highlight the reliability of sparse inverse verification across key robustness factors.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experiment 2: Figure 4 -->
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
+          <img src="./media/fig/fig4.png" alt="MiniGrid OOD generalization and world model improvement"
+            style="width: 100%; max-width: 100%; height: auto;" />
+        </figure>
+        <div class="box has-background-white-bis" style="max-width: 980px; margin: 0 auto;">
+          <div class="content has-text-justified" style="margin-top: 1rem;">
+            <p>
+              <strong>Sparse Inverse Verification for World Model Improvement</strong><br>
+              We examine the ability of models to generalize to unseen environments and improve world model learning:
+            </p>
+            <ul style="text-align: left; margin-left: 1.5rem;">
+              <li><strong>Vanilla vs Sparse IDM:</strong> Sparse IDMs maintain strong performance on interaction-heavy actions, whereas vanilla IDMs fail in low-data regimes.</li>
+              <li><strong>World Model Enhancement:</strong> WAV-guided exploration selects critical, interaction-rich transitions, achieving lower prediction error than baselines and closely matching the Oracle strategy.</li>
+              <li><strong>Sample Prioritization:</strong> Verification scores effectively reflect transition difficulty, guiding efficient and informative data collection.</li>
+            </ul>
+            <p>
+              Together, these experiments demonstrate that sparse inverse verification improves robustness, guides exploration, and enhances world model learning in under-explored regimes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
+          <img src="./media/fig/fig5.png" alt="World Model Prediction Error across Data Budgets"
+            style="width: 100%; max-width: 100%; height: auto;" />
+        </figure>
+        <div class="box has-background-white-bis" style="max-width: 980px; margin: 0 auto;">
+          <div class="content has-text-justified" style="margin-top: 1rem;">
+            <p>
+              <strong>World Model Prediction Across Data Budgets</strong><br>
+              We evaluate world-model learning quality on RoboMimic and ManiSkill tasks by measuring next-observation prediction MSE:
+            </p>
+            <ul style="text-align: left; margin-left: 1.5rem;">
+              <li><strong>Performance Gains:</strong> Our approach consistently reduces prediction error across all data budgets compared to baselines.</li>
+              <li><strong>Low-Data Advantage:</strong> Gains are particularly pronounced in low-data regimes, demonstrating efficient utilization of limited trajectories.</li>
+              <li><strong>Sparse IDM Benefit:</strong> Sparse inverse dynamics models outperform dense variants, highlighting the role of selective latent action representation.</li>
+            </ul>
+            <p>
+              These results confirm that WAV-guided exploration and sparse modeling improve the accuracy of learned dynamics under diverse conditions.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
+          <img src="./media/fig/fig6.png" alt="Correlation of Verification Scores with Oracle"
+            style="width: 100%; max-width: 100%; height: auto;" />
+        </figure>
+        <div class="box has-background-white-bis" style="max-width: 980px; margin: 0 auto;">
+          <div class="content has-text-justified" style="margin-top: 1rem;">
+            <p>
+              <strong>Alignment with Oracle Difficulty Rankings</strong><br>
+              We measure how well verification scores reflect the difficulty of transitions using Spearman and Kendall correlations:
+            </p>
+            <ul style="text-align: left; margin-left: 1.5rem;">
+              <li><strong>High Fidelity Ranking:</strong> Our verification scores closely match the Oracle-defined difficulty ranking.</li>
+              <li><strong>Guided Data Collection:</strong> Accurate ranking allows prioritization of interaction-rich, informative transitions for efficient exploration.</li>
+              <li><strong>Robustness Across Environments:</strong> Alignment holds consistently for both RoboMimic and ManiSkill tasks.</li>
+            </ul>
+            <p>
+              This demonstrates that sparse inverse verification can reliably identify critical experiences for world model improvement.
+            </p>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="experiment-item" style="margin-bottom: 3rem;">
+        <figure class="image" style="margin-bottom: 1.75rem; display: flex; justify-content: center;">
+          <img src="./media/fig/fig7.png" alt="Downstream Policy Learning Performance"
+            style="width: 100%; max-width: 100%; height: auto;" />
+        </figure>
+        <div class="box has-background-white-bis" style="max-width: 980px; margin: 0 auto;">
+          <div class="content has-text-justified" style="margin-top: 1rem;">
+            <p>
+              <strong>Impact on Policy Learning via Imagination</strong><br>
+              We evaluate whether improved world models translate to stronger downstream policy performance:
+            </p>
+            <ul style="text-align: left; margin-left: 1.5rem;">
+              <li><strong>Higher Rewards:</strong> Policies trained with our world model consistently outperform baselines and approach Oracle-level performance.</li>
+              <li><strong>Complex Task Advantage:</strong> Gains are most pronounced on high-ambiguity or contact-rich tasks (Can, Square, PokeCube), where accurate latent dynamics are critical.</li>
+              <li><strong>Sample Efficiency:</strong> Improved world models accelerate policy tuning in imagination, reducing the need for extensive real-world interactions.</li>
+            </ul>
+            <p>
+              Overall, these results confirm that self-improved world models enhance both task-relevant dynamics representation and imagination-based planning.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="hero exp-video-section exp-video-section--robot">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Videos</h2>
+
+      <div class="box exp-video-panel" style="margin-bottom: 2rem;">
+        <h3 class="title is-4 publication-title wav-heading has-text-centered">Exploration Tasks in MiniGrid</h3>
+        <p class="exp-video-lead">
+          We evaluate WAV on three long-horizon MiniGrid tasks, 
+          namely Key Delivery, Ball Delivery, and Object Matching,
+          which are specifically designed for this work, as well as 
+          on random play in EmptyEnv with noisy tiles.
+        </p>
+
+        <div class="exp-video-grid exp-video-grid--4">
+          <div class="exp-video-card">
+            <div class="exp-video-frame">
+              <video autoplay muted playsinline loop preload="metadata" controls>
+                <source src="./media/video/minigrid/key_delivery.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <p class="exp-video-caption">Key Delivery</p>
+          </div>
+          <div class="exp-video-card">
+            <div class="exp-video-frame">
+              <video autoplay muted playsinline loop preload="metadata" controls>
+                <source src="./media/video/minigrid/ball_delivery.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <p class="exp-video-caption">Ball Delivery</p>
+          </div>
+          <div class="exp-video-card">
+            <div class="exp-video-frame">
+              <video autoplay muted playsinline loop preload="metadata" controls>
+                <source src="./media/video/minigrid/object_matching.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <p class="exp-video-caption">Object Matching</p>
+          </div>
+          <div class="exp-video-card">
+            <div class="exp-video-frame">
+              <video autoplay muted playsinline loop preload="metadata" controls>
+                <source src="./media/video/minigrid/noise_emptyenv.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <p class="exp-video-caption">Random play in EmptyEnv</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box exp-video-panel" style="margin-bottom: 2rem;">
+        <h3 class="title is-4 publication-title wav-heading has-text-centered">Prediction Comparison in MiniGrid</h3>
+        <p class="exp-video-lead">
+          Select an initial state and then choose an action below to compare one-step predictions from different methods and the ground truth.
+          Green borders indicate correct predictions, red borders indicate prediction errors, and the gold border denotes the ground truth next state.
+        </p>
+
+        <div id="minigrid-prediction-gallery" class="prediction-gallery">
+          <div class="prediction-gallery-row">
+            <button class="prediction-thumb-button is-active" type="button" data-initial-state="state1" aria-label="Select initial state 1">
+              <img src="./media/fig/wm_predictions/initial_1/initial.png" alt="Initial state 1">
+            </button>
+            <button class="prediction-thumb-button" type="button" data-initial-state="state2" aria-label="Select initial state 2">
+              <img src="./media/fig/wm_predictions/initial_2/initial.png" alt="Initial state 2">
+            </button>
+            <button class="prediction-thumb-button" type="button" data-initial-state="state3" aria-label="Select initial state 3">
+              <img src="./media/fig/wm_predictions/initial_3/initial.png" alt="Initial state 3">
+            </button>
+            <button class="prediction-thumb-button" type="button" data-initial-state="state4" aria-label="Select initial state 4">
+              <img src="./media/fig/wm_predictions/initial_4/initial.png" alt="Initial state 4">
+            </button>
+          </div>
+
+          <div class="prediction-gallery-row">
+            <div class="prediction-method-card">
+              <div class="prediction-result-frame">
+                <img data-method-image="Progress" src="./media/fig/placeholder2.png" alt="Progress prediction">
+              </div>
+              <p class="prediction-method-caption">Progress</p>
+            </div>
+            <div class="prediction-method-card">
+              <div class="prediction-result-frame">
+                <img data-method-image="Uncertainty" src="./media/fig/placeholder2.png" alt="Uncertainty prediction">
+              </div>
+              <p class="prediction-method-caption">Uncertainty</p>
+            </div>
+            <div class="prediction-method-card">
+              <div class="prediction-result-frame">
+                <img data-method-image="Ours" src="./media/fig/placeholder2.png" alt="Ours prediction">
+              </div>
+              <p class="prediction-method-caption">Ours</p>
+            </div>
+            <div class="prediction-method-card">
+              <div class="prediction-result-frame">
+                <img data-method-image="GroundTruth" src="./media/fig/placeholder2.png" alt="Ground truth next state">
+              </div>
+              <p class="prediction-method-caption">Ground Truth</p>
+            </div>
+          </div>
+
+          <div class="prediction-action-row">
+            <button class="prediction-action-button is-active" type="button" data-action="pick-up">Pick-up</button>
+            <button class="prediction-action-button" type="button" data-action="drop">Drop</button>
+            <button class="prediction-action-button" type="button" data-action="toggle">Toggle</button>
+            <button class="prediction-action-button" type="button" data-action="swap">Swap</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="box exp-video-panel">
+        <h3 class="title is-4 publication-title wav-heading has-text-centered">Qualitative comparison of world model predictions</h3>
+        <p class="exp-video-lead">
+          The videos compare world model rollouts from different curation strategies. 
+          WAV produces predictions that closely match the ground truth, while world models learned with Uncertainty and Progress often yield inaccurate or overly blurred future frames.
+        </p>
+
+        <div class="exp-video-row">
+          <h3 class="title is-4 exp-video-task">Can</h3>
+          <div class="exp-video-grid exp-video-grid--4">
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/can/progress.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Progress</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/can/uncertainty.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Uncertainty</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/can/wav.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Ours</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/can/gt.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Ground truth</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-video-row">
+          <h3 class="title is-4 exp-video-task">Lift</h3>
+          <div class="exp-video-grid exp-video-grid--4">
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/lift/progress.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Progress</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/lift/uncertainty.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Uncertainty</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/lift/wav.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Ours</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/lift/gt.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Ground truth</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="exp-video-row">
+          <h3 class="title is-4 exp-video-task">Square</h3>
+          <div class="exp-video-grid exp-video-grid--4">
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/square/progress.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Progress</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/square/uncertainty.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Uncertainty</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/square/wav.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Ours</p>
+            </div>
+            <div class="exp-video-card">
+              <div class="exp-video-frame">
+                <video autoplay muted playsinline loop preload="metadata" controls>
+                  <source src="./media/video/square/gt.mp4" type="video/mp4" />
+                </video>
+              </div>
+              <p class="exp-video-caption">Ground truth</p>
             </div>
           </div>
         </div>
@@ -336,203 +1043,17 @@
   </div>
 </section>
 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3 publication-title wav-heading has-text-centered">Method: Asymmetric Forward-Inverse Consistency</h2>
-          <img src="./media/fig/method.png" alt="World Action Verifier method overview"
-            style="width:100%; height:auto;" />
-          <div class="content has-text-justified" style="margin-top:1.5rem;">
-            <p>
-              Our objective is to learn a robust action-conditioned world model that satisfies two 
-              critical desiderata: high fidelity in state prediction and reliable controllability in 
-              under-explored regimes. Prior world models often collapse on the long tail of suboptimal
-              actions due to the scarcity of labeled interaction data and the difficulty of verifying
-              high-dimensional predictions. WAV remedies that by exploiting the asymmetry between 
-              generation and verification through a video-prior subgoal generator, a sparse inverse
-              model, and a forward-inverse cycle. Leveraging the abundance of unlabeled videos for
-              state plausibility and a sparsity constraint for action identifiability induces a 
-              rigorous self-verification mechanism. This cycle-consistency metric allows the agent
-              to autonomously detect and correct errors in novel scenarios, enabling data-efficient 
-              self-improvement without dense supervision, as shown in the figure above.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero exp-video-section">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 publication-title wav-heading has-text-centered">Diagnostic Experiments in MiniGrid</h2>
-      <p class="exp-video-lead has-text-centered">Placeholder videos — replace sources and captions when ready.</p>
-      <div class="exp-video-grid">
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 1</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 2</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 3</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 4</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero exp-video-section">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 publication-title wav-heading has-text-centered">Curation Experiments in RoboMimic &amp; ManiSkill</h2>
-      <p class="exp-video-lead has-text-centered">Placeholder videos — replace sources and captions when ready.</p>
-      <div class="exp-video-grid">
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 1</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 2</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 3</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 4</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero exp-video-section">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 publication-title wav-heading has-text-centered">Policy Experiments in RoboMimic &amp; ManiSkill</h2>
-      <p class="exp-video-lead has-text-centered">Placeholder videos — replace sources and captions when ready.</p>
-      <div class="exp-video-grid">
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 1</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 2</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 3</p>
-        </div>
-        <div class="exp-video-card">
-          <div class="exp-video-frame">
-            <video controls playsinline muted loop preload="metadata">
-              <source src="./media/video/placeholder.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <p class="exp-video-caption">Video 4</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 wav-heading has-text-centered">Results</h2>
-
-      <!-- Experiment 1 -->
-      <div class="experiment-item" style="margin-bottom: 3rem;">
-        <figure style="margin-bottom: 1.5rem;">
-          <img src="./media/fig/fig3.png" alt="Experiment figure 3" />
-        </figure>
-      </div>
-
-      <!-- Experiment 2 -->
-      <div class="experiment-item" style="margin-bottom: 3rem;">
-        <figure style="margin-bottom: 1.5rem;">
-          <img src="./media/fig/fig4.png" alt="Experiment figure 4" />
-        </figure>
-      </div>
-
-      <!-- Experiment 3 -->
-      <div class="experiment-item" style="margin-bottom: 3rem;">
-        <figure style="margin-bottom: 1.5rem;">
-          <img src="./media/fig/fig5.png" alt="Experiment figure 5" />
-        </figure>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{liu2026selfimproving,
-      title={World Action Verifier: Self-Improving World Models via Asymmetric Forward-Inverse Consistency},
-      author={Liu, Yuejiang and Kong, Lingjing and Feng, Fan and Lu, Weifeng and Tang, Jinzhou and Zhang, 
-              XiangCheng and Zhang, Kun and Murphy, Kevin Patrick and Du, Yilun and Finn, Chelsea},
-      journal={arXiv preprint arXiv:2602.XXXXX},
-      year={2026}
+    <pre><code>@misc{liu2026worldactionverifierselfimproving,
+      title={World Action Verifier: Self-Improving World Models via Forward-Inverse Asymmetry}, 
+      author={Yuejiang Liu and Fan Feng and Lingjing Kong and Weifeng Lu and Jinzhou Tang and Kun Zhang and Kevin Murphy and Chelsea Finn and Yilun Du},
+      year={2026},
+      eprint={2604.01985},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2604.01985}, 
 }</code></pre>
   </div>
 </section>
@@ -548,6 +1069,160 @@
     </div>
   </div>
 </footer>
+<script>
+  (function () {
+    const gallery = document.getElementById('minigrid-prediction-gallery');
+    if (!gallery) return;
+
+    const stateButtons = Array.from(gallery.querySelectorAll('.prediction-thumb-button'));
+    const actionButtons = Array.from(gallery.querySelectorAll('.prediction-action-button'));
+    const methodImages = Array.from(gallery.querySelectorAll('[data-method-image]'));
+
+    let selectedState = 'state1';
+    let selectedAction = 'pick-up';
+
+    // Mapping from selected initial state + action to method-specific next-state image.
+    const imageMap = {
+      state1: {
+        'pick-up': {
+          Progress: './media/fig/wm_predictions/initial_1/Progress/action_3.png',
+          Uncertainty: './media/fig/wm_predictions/initial_1/Uncertainty/action_3.png',
+          Ours: './media/fig/wm_predictions/initial_1/Ours/action_3.png',
+          GroundTruth: './media/fig/wm_predictions/initial_1/Ground Truth/action_3.png'
+        },
+        drop: {
+          Progress: './media/fig/wm_predictions/initial_1/Progress/action_4.png',
+          Uncertainty: './media/fig/wm_predictions/initial_1/Uncertainty/action_4.png',
+          Ours: './media/fig/wm_predictions/initial_1/Ours/action_4.png',
+          GroundTruth: './media/fig/wm_predictions/initial_1/Ground Truth/action_4.png'
+        },
+        toggle: {
+          Progress: './media/fig/wm_predictions/initial_1/Progress/action_5.png',
+          Uncertainty: './media/fig/wm_predictions/initial_1/Uncertainty/action_5.png',
+          Ours: './media/fig/wm_predictions/initial_1/Ours/action_5.png',
+          GroundTruth: './media/fig/wm_predictions/initial_1/Ground Truth/action_5.png'
+        },
+        swap: {
+          Progress: './media/fig/wm_predictions/initial_1/Progress/action_6.png',
+          Uncertainty: './media/fig/wm_predictions/initial_1/Uncertainty/action_6.png',
+          Ours: './media/fig/wm_predictions/initial_1/Ours/action_6.png',
+          GroundTruth: './media/fig/wm_predictions/initial_1/Ground Truth/action_6.png'
+        }
+      },
+      state2: {
+        'pick-up': {
+          Progress: './media/fig/wm_predictions/initial_2/Progress/action_3.png',
+          Uncertainty: './media/fig/wm_predictions/initial_2/Uncertainty/action_3.png',
+          Ours: './media/fig/wm_predictions/initial_2/Ours/action_3.png',
+          GroundTruth: './media/fig/wm_predictions/initial_2/Ground Truth/action_3.png'
+        },
+        drop: {
+          Progress: './media/fig/wm_predictions/initial_2/Progress/action_4.png',
+          Uncertainty: './media/fig/wm_predictions/initial_2/Uncertainty/action_4.png',
+          Ours: './media/fig/wm_predictions/initial_2/Ours/action_4.png',
+          GroundTruth: './media/fig/wm_predictions/initial_2/Ground Truth/action_4.png'
+        },
+        toggle: {
+          Progress: './media/fig/wm_predictions/initial_2/Progress/action_5.png',
+          Uncertainty: './media/fig/wm_predictions/initial_2/Uncertainty/action_5.png',
+          Ours: './media/fig/wm_predictions/initial_2/Ours/action_5.png',
+          GroundTruth: './media/fig/wm_predictions/initial_2/Ground Truth/action_5.png'
+        },
+        swap: {
+          Progress: './media/fig/wm_predictions/initial_2/Progress/action_6.png',
+          Uncertainty: './media/fig/wm_predictions/initial_2/Uncertainty/action_6.png',
+          Ours: './media/fig/wm_predictions/initial_2/Ours/action_6.png',
+          GroundTruth: './media/fig/wm_predictions/initial_2/Ground Truth/action_6.png'
+        }
+      },
+      state3: {
+        'pick-up': {
+          Progress: './media/fig/wm_predictions/initial_3/Progress/action_3.png',
+          Uncertainty: './media/fig/wm_predictions/initial_3/Uncertainty/action_3.png',
+          Ours: './media/fig/wm_predictions/initial_3/Ours/action_3.png',
+          GroundTruth: './media/fig/wm_predictions/initial_3/Ground Truth/action_3.png'
+        },
+        drop: {
+          Progress: './media/fig/wm_predictions/initial_3/Progress/action_4.png',
+          Uncertainty: './media/fig/wm_predictions/initial_3/Uncertainty/action_4.png',
+          Ours: './media/fig/wm_predictions/initial_3/Ours/action_4.png',
+          GroundTruth: './media/fig/wm_predictions/initial_3/Ground Truth/action_4.png'
+        },
+        toggle: {
+          Progress: './media/fig/wm_predictions/initial_3/Progress/action_5.png',
+          Uncertainty: './media/fig/wm_predictions/initial_3/Uncertainty/action_5.png',
+          Ours: './media/fig/wm_predictions/initial_3/Ours/action_5.png',
+          GroundTruth: './media/fig/wm_predictions/initial_3/Ground Truth/action_5.png'
+        },
+        swap: {
+          Progress: './media/fig/wm_predictions/initial_3/Progress/action_6.png',
+          Uncertainty: './media/fig/wm_predictions/initial_3/Uncertainty/action_6.png',
+          Ours: './media/fig/wm_predictions/initial_3/Ours/action_6.png',
+          GroundTruth: './media/fig/wm_predictions/initial_3/Ground Truth/action_6.png'
+        }
+      },
+      state4: {
+        'pick-up': {
+          Progress: './media/fig/wm_predictions/initial_4/Progress/action_3.png',
+          Uncertainty: './media/fig/wm_predictions/initial_4/Uncertainty/action_3.png',
+          Ours: './media/fig/wm_predictions/initial_4/Ours/action_3.png',
+          GroundTruth: './media/fig/wm_predictions/initial_4/Ground Truth/action_3.png'
+        },
+        drop: {
+          Progress: './media/fig/wm_predictions/initial_4/Progress/action_4.png',
+          Uncertainty: './media/fig/wm_predictions/initial_4/Uncertainty/action_4.png',
+          Ours: './media/fig/wm_predictions/initial_4/Ours/action_4.png',
+          GroundTruth: './media/fig/wm_predictions/initial_4/Ground Truth/action_4.png'
+        },
+        toggle: {
+          Progress: './media/fig/wm_predictions/initial_4/Progress/action_5.png',
+          Uncertainty: './media/fig/wm_predictions/initial_4/Uncertainty/action_5.png',
+          Ours: './media/fig/wm_predictions/initial_4/Ours/action_5.png',
+          GroundTruth: './media/fig/wm_predictions/initial_4/Ground Truth/action_5.png'
+        },
+        swap: {
+          Progress: './media/fig/wm_predictions/initial_4/Progress/action_6.png',
+          Uncertainty: './media/fig/wm_predictions/initial_4/Uncertainty/action_6.png',
+          Ours: './media/fig/wm_predictions/initial_4/Ours/action_6.png',
+          GroundTruth: './media/fig/wm_predictions/initial_4/Ground Truth/action_6.png'
+        }
+      }
+    };
+
+    function renderResults() {
+      const actionMap = imageMap[selectedState] && imageMap[selectedState][selectedAction];
+      if (!actionMap) return;
+
+      methodImages.forEach((imgEl) => {
+        const methodName = imgEl.getAttribute('data-method-image');
+        const src = actionMap[methodName];
+        if (src) {
+          imgEl.src = src;
+        }
+      });
+    }
+
+    stateButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        selectedState = this.getAttribute('data-initial-state');
+        stateButtons.forEach((btn) => btn.classList.remove('is-active'));
+        this.classList.add('is-active');
+        renderResults();
+      });
+    });
+
+    actionButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        selectedAction = this.getAttribute('data-action');
+        actionButtons.forEach((btn) => btn.classList.remove('is-active'));
+        this.classList.add('is-active');
+        renderResults();
+      });
+    });
+
+    renderResults();
+  })();
+</script>
 </body>
 
 </html>
