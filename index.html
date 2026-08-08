@@ -367,6 +367,45 @@
       }
     }
 
+    /* Theory equation follows the same box treatment as Method and Experiments. */
+    .theory-equation {
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .theory-equation mjx-container {
+      min-width: max-content;
+      margin: 1rem auto !important;
+    }
+
+    .theory-equation--compact {
+      display: none;
+    }
+
+    .theory-notation {
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 768px) {
+      .theory-equation {
+        font-size: 0.88rem;
+      }
+
+      .theory-equation--full {
+        display: none;
+      }
+
+      .theory-equation--compact {
+        display: block;
+        overflow: visible;
+      }
+
+      .theory-equation--compact mjx-container {
+        min-width: 0;
+      }
+    }
+
     #BibTeX.section {
       background: #fff;
       border-top: 1px solid #eee;
@@ -507,7 +546,7 @@
                   <span>Code (Robot)</span>
                   </a>
               </span>
-              <span class="link-block">
+<!--               <span class="link-block">
                 <a href="https://huggingface.co/spaces/ffeng1017/World-Action-Verifier"
                   class="external-link button is-normal is-rounded is-dark"
                   target="_blank"
@@ -517,7 +556,7 @@
                   </span>
                   <span>Demo</span>
                 </a>
-              </span>
+              </span> -->
               <!-- <span class="link-block">
                 <a href="#"
                   onclick="return false;"
@@ -656,6 +695,73 @@
 
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero" id="theory">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 publication-title wav-heading has-text-centered">Theory: When Is Inverse Verification Easier?</h2>
+      <div class="box has-background-white-bis" style="max-width: 980px; margin: 0 auto;">
+        <div class="content has-text-justified" style="line-height: 1.6;">
+          <p>
+            To make the forward–inverse asymmetry precise, consider a stylized linear–Gaussian setting in which a dense
+            forward predictor and a sparse inverse verifier are trained on the same $n$ action-labeled transitions.
+            Their expected errors, measured in state space, obey the following lower bound:
+          </p>
+
+          <div class="theory-equation theory-equation--full" aria-label="Forward error divided by inverse error is lower bounded by dimensionality, stochasticity, and sample-size factors">
+            $$
+            \frac{\mathbb{E}[\mathcal{E}_{F}]}{\mathbb{E}[\mathcal{E}_{I}]}
+            \;\geq\;
+            \underbrace{\left(\frac{d_s+d_a}{2d_z}\cdot\frac{d_s}{d_a}\right)}_{\text{dimensionality}}
+            \cdot
+            \underbrace{\left(\frac{\sigma_s}{\lambda\,\sigma_a}\right)^2}_{\text{stochasticity}}
+            \cdot
+            \underbrace{\left(\frac{n-2d_z-1}{n-(d_s+d_a)-1}\right)}_{\text{sample size}}
+            $$
+          </div>
+
+          <div class="theory-equation theory-equation--compact" aria-label="Forward error divided by inverse error is lower bounded by dimensionality, stochasticity, and sample-size factors">
+            $$
+            \frac{\mathbb{E}[\mathcal{E}_{F}]}{\mathbb{E}[\mathcal{E}_{I}]}
+            \;\geq\;
+            \underbrace{D}_{\text{dimensions}}
+            \cdot
+            \underbrace{S}_{\text{noise}}
+            \cdot
+            \underbrace{N}_{\text{data}}
+            $$
+          </div>
+
+          <p class="theory-notation">
+            Here, $d_s$, $d_a$, and $d_z$ denote the dimensions of the full state, action, and action-relevant state;
+            $\sigma_s$ is transition noise, $\sigma_a$ is inverse ambiguity, and $\lambda$ measures how strongly action
+            error affects the state. Assuming $n &gt; d_s+d_a+1$ and $n &gt; 2d_z+1$, the ratio separates into three
+            interpretable factors:
+          </p>
+          <ul style="text-align: left; margin-left: 1.5rem;">
+            <li>
+              <strong>Dimensionality:</strong> the gap widens when actions depend on only a small slice of a large visual
+              state, $d_z \ll d_s$.
+            </li>
+            <li>
+              <strong>Stochasticity:</strong> inverse verification benefits when the environment is noisy but the action’s
+              local effect remains easy to infer.
+            </li>
+            <li>
+              <strong>Sample size:</strong> with scarce labeled data, the dense forward estimator is less stable than the
+              sparse inverse verifier.
+            </li>
+          </ul>
+
+          <p style="margin-top: 1rem;">
+            <strong>Takeaway.</strong> WAV is most advantageous in high-dimensional
+            stochastic environments where action-labeled data are scarce.
+          </p>
         </div>
       </div>
     </div>
